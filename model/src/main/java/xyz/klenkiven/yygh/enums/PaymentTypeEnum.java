@@ -1,6 +1,9 @@
 package xyz.klenkiven.yygh.enums;
 
 public enum PaymentTypeEnum {
+    /**
+     *
+     */
     ALIPAY(1,"支付宝"),
     WEIXIN(2,"微信" );
 

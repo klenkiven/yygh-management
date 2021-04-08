@@ -2,6 +2,9 @@ package xyz.klenkiven.yygh.enums;
 
 public enum AuthStatusEnum {
 
+    /**
+     * NO_AUTH: 认证中
+     */
     NO_AUTH(0, "未认证"),
     AUTH_RUN(1, "认证中"),
     AUTH_SUCCESS(2, "认证成功"),

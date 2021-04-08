@@ -2,7 +2,9 @@ package xyz.klenkiven.yygh.enums;
 
 public enum DictEnum {
 
-
+    /**
+     * HOSTYPE: 医院等级
+     */
     HOSTYPE("Hostype", "医院等级"),
     CERTIFICATES_TYPE("CertificatesType", "证件类型"),
     ;

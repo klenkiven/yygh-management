@@ -1,6 +1,9 @@
 package xyz.klenkiven.yygh.enums;
 
 public enum RefundStatusEnum {
+    /**
+     *
+     */
     UNREFUND(1,"退款中"),
     REFUND(2,"已退款");
 
