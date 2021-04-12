@@ -31,6 +31,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>xyz.klenkiven</groupId>
+            <artifactId>common_util</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!--web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -52,6 +58,7 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+
         <!-- 服务调用feign -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.cloud</groupId>-->

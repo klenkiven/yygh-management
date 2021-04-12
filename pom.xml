@@ -7,8 +7,8 @@
         <module>common</module>
         <module>model</module>
         <module>service</module>
-        <module>service_client</module>
-        <module>service_gateway</module>
+<!--        <module>service_client</module>-->
+<!--        <module>service_gateway</module>-->
     </modules>
 
     <parent>
@@ -29,7 +29,7 @@
         <alibaba.version>2020.0.RC1</alibaba.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <mariadb.version>2.7.2</mariadb.version>
-        <swagger.version>3.0.0</swagger.version>
+        <swagger.version>2.7.0</swagger.version>
         <jwt.version>0.9.1</jwt.version>
         <fastjson.version>1.2.76</fastjson.version>
         <httpclient.version>4.5.13</httpclient.version>
@@ -38,6 +38,14 @@
         <oss.version>3.12.0</oss.version>
         <jodatime.version>2.10.10</jodatime.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <!--配置dependencyManagement锁定依赖的版本-->
     <dependencyManagement>
@@ -75,6 +83,11 @@
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-spring-web</artifactId>
                 <version>${swagger.version}</version>
             </dependency>
             <!--swagger ui-->
@@ -128,6 +141,32 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <!-- 配置阿里云的仓库 -->
+    <repositories>
+        <repository>
+            <id>public</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>spring</id>
+            <url>https://maven.aliyun.com/repository/spring</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 
     <build>
         <plugins>
