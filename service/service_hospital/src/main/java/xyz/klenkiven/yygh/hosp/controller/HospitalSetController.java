@@ -127,7 +127,7 @@ public class HospitalSetController {
      */
     @ApiOperation("获取通过ID医院设置")
     @GetMapping("/getHospSet/{id}")
-    public Result<HospitalSet> getHospSetById(@PathVariable long id) {
+    public Result<HospitalSet> getHospSetById(@PathVariable Long id) {
         HospitalSet byId = hospitalSetService.getById(id);
         return Result.ok(byId);
     }
@@ -156,8 +156,45 @@ public class HospitalSetController {
      */
     @ApiOperation("批量删除医院设置")
     @DeleteMapping("/batchRemove")
-    public Result<?> batchRemoveHosp(@RequestBody List<String> ids) {
+    public Result<?> batchRemoveHosp(@RequestBody List<Long> ids) {
         hospitalSetService.removeByIds(ids);
+        return Result.ok();
+    }
+
+    /**
+     * 锁定或者解锁医院设置
+     *
+     * @param id 医院设置ID
+     * @param status 医院设置锁定状态
+     * @return 返回执行结果
+     */
+    @ApiOperation("锁定或者解锁医院设置")
+    @PutMapping("/lockHospitalSet/{id}/{status}")
+    public Result<?> lockHospitalSet(@PathVariable Long id,
+                                     @PathVariable int status) {
+        HospitalSet hospitalSet = hospitalSetService.getById(id);
+        if (hospitalSet == null) return Result.fail();
+
+        hospitalSet.setStatus(status);
+        hospitalSetService.updateById(hospitalSet);
+
+        return Result.ok();
+    }
+
+    /**
+     * 发送签名密钥
+     *
+     * @param id 医院设置ID
+     * @return 返回结果
+     */
+    @ApiOperation("发送签名密钥")
+    @PutMapping("/sendKey/{id}")
+    public Result<?> sentKeyToHospital(@PathVariable Long id) {
+        HospitalSet hospitalSet = hospitalSetService.getById(id);
+        String signKey = hospitalSet.getSignKey();
+        String hoscode = hospitalSet.getHoscode();
+
+        // TODO 发送短信
         return Result.ok();
     }
 }
