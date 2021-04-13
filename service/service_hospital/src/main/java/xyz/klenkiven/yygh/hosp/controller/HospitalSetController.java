@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import xyz.klenkiven.yygh.common.exception.YyghException;
 import xyz.klenkiven.yygh.common.result.Result;
 import xyz.klenkiven.yygh.common.utils.MD5;
 import xyz.klenkiven.yygh.hosp.service.HospitalSetService;
