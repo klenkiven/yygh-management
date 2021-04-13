@@ -2,19 +2,19 @@ package xyz.klenkiven.yygh.hosp.controller;
 
 import com.alibaba.excel.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.apache.poi.util.StringUtil;
 import org.springframework.web.bind.annotation.*;
 import xyz.klenkiven.yygh.common.result.Result;
+import xyz.klenkiven.yygh.common.utils.MD5;
 import xyz.klenkiven.yygh.hosp.service.HospitalSetService;
 import xyz.klenkiven.yygh.model.hosp.HospitalSet;
 import xyz.klenkiven.yygh.vo.hosp.HospitalQueryVo;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * 医院设置的Controller
@@ -94,5 +94,28 @@ public class HospitalSetController {
         Page<HospitalSet> hospitalSetPage = hospitalSetService.page(page, queryWrapper);
 
         return Result.ok(hospitalSetPage);
+    }
+
+    /**
+     * 添加医院设置接口
+     *
+     * @param hospitalSet 医院设置内容
+     * @return 返回结果
+     */
+    @ApiOperation("添加医院设置接口")
+    @PostMapping("/saveHospitalSet")
+    public Result<?> saveHospitalSet(@RequestBody HospitalSet hospitalSet) {
+        Random random = new Random();
+
+        // 设置状态 1 可以使用 0 不可以使用
+        hospitalSet.setStatus(1);
+        // Sign Private Secret
+        hospitalSet.setSignKey(MD5.encrypt(System.currentTimeMillis()+""+random.nextInt(1000)));
+        // Change info
+        boolean save = hospitalSetService.save(hospitalSet);
+        if (save)
+            return Result.ok();
+        else
+            return Result.fail();
     }
 }
