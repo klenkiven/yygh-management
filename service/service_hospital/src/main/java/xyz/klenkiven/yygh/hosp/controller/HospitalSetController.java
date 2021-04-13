@@ -118,4 +118,46 @@ public class HospitalSetController {
         else
             return Result.fail();
     }
+
+    /**
+     * 获取通过ID医院设置
+     *
+     * @param id 医院ID
+     * @return 医院设置信息
+     */
+    @ApiOperation("获取通过ID医院设置")
+    @GetMapping("/getHospSet/{id}")
+    public Result<HospitalSet> getHospSetById(@PathVariable long id) {
+        HospitalSet byId = hospitalSetService.getById(id);
+        return Result.ok(byId);
+    }
+
+    /**
+     * 修改医院设置
+     *
+     * @param hospitalSet 医院修改后的信息
+     * @return 执行结果
+     */
+    @ApiOperation("修改医院设置")
+    @PutMapping("/updateHospSet")
+    public Result<?> updateHospSet(@RequestBody HospitalSet hospitalSet) {
+        boolean b = hospitalSetService.updateById(hospitalSet);
+        if (b)
+            return Result.ok();
+        else
+            return Result.fail();
+    }
+
+    /**
+     * 批量删除医院设置
+     *
+     * @param ids  医院ID
+     * @return 执行结果
+     */
+    @ApiOperation("批量删除医院设置")
+    @DeleteMapping("/batchRemove")
+    public Result<?> batchRemoveHosp(@RequestBody List<String> ids) {
+        hospitalSetService.removeByIds(ids);
+        return Result.ok();
+    }
 }
