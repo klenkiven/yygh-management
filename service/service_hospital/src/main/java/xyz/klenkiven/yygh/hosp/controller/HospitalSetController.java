@@ -76,10 +76,10 @@ public class HospitalSetController {
      * @return 返回Page结果
      */
     @ApiOperation("条件查询分页展示")
-    @GetMapping("/findPage/{current}/{limit}")
+    @PostMapping("/findPage/{current}/{limit}")
     public Result<Page<HospitalSet>> findPageHospSet(@PathVariable long current,
                                                      @PathVariable long limit,
-                                                     HospitalQueryVo hospitalQueryVo) {
+                                                     @RequestBody(required = false) HospitalQueryVo hospitalQueryVo) {
         // 创建Page对象，传递当前页，每页记录数
         Page<HospitalSet> page = new Page<>(current, limit);
         // 构造条件
