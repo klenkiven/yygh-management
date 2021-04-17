@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @date ：2021/4/8 18:12
  */
 @SpringBootApplication
-@ComponentScan(basePackages = "xyz.klenkiven")
+@ComponentScan(basePackages = {"xyz.klenkiven"})
 public class ServiceHospApplication {
 
     public static void main(String[] args) {
