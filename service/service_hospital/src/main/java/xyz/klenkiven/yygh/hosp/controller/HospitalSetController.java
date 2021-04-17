@@ -28,7 +28,7 @@ import java.util.Random;
  * @author ：klenkiven
  * @date ：2021/4/8 19:06
  */
-@Api("医院设置")
+@Api(tags = "医院设置")
 @RestController
 @CrossOrigin
 @RequestMapping("/admin/hosp/hospitalSet")
