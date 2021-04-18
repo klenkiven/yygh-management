@@ -18,6 +18,7 @@ public class DictListener extends AnalysisEventListener<DictEeVo> {
     public void invoke(DictEeVo dictEeVo, AnalysisContext analysisContext) {
         Dict dict = new Dict();
         BeanUtils.copyProperties(dictEeVo, dict);
+        dict.setIsDeleted(0);
         dictService.saveOrUpdate(dict);
     }
 
