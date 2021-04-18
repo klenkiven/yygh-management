@@ -1,12 +1,19 @@
 package xyz.klenkiven.yygh.cmn.service.impl;
 
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import xyz.klenkiven.yygh.cmn.listener.DictListener;
 import xyz.klenkiven.yygh.cmn.mapper.DictMapper;
 import xyz.klenkiven.yygh.cmn.service.DictService;
 import xyz.klenkiven.yygh.model.cmn.Dict;
+import xyz.klenkiven.yygh.vo.cmn.DictEeVo;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +52,49 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         dictQueryWrapper.exists("select * from dict where parent_id = " + dict.getId());
 
         return !baseMapper.selectList(dictQueryWrapper).isEmpty();
+    }
+
+    @Override
+    public void exportDict(HttpServletResponse response) {
+        // 设置下载信息
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        String fileName = "dict";
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+
+        // 查询数据库
+        List<Dict> dictList = baseMapper.selectList(null);
+        // Dict转换为Dict vo对象
+        List<DictEeVo> dictEeVoList = new ArrayList<>(dictList.size());
+        for (Dict d: dictList) {
+            DictEeVo dictEeVo = new DictEeVo();
+            // 复制属性信息
+//            dictEeVo.setDictCode(d.getDictCode());
+//            dictEeVo.setId(d.getId());
+//            dictEeVo.setName(d.getName());
+//            dictEeVo.setValue(d.getValue());
+//            dictEeVo.setParentId(d.getParentId());
+            // 直接有工具可以做
+            BeanUtils.copyProperties(d, dictEeVo);
+            dictEeVoList.add(dictEeVo);
+        }
+        try {
+            EasyExcel.write(response.getOutputStream(), DictEeVo.class)
+                    .sheet("Dict")
+                    .doWrite(dictEeVoList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void importDict(MultipartFile file) {
+        try {
+            EasyExcel.read(file.getInputStream(), DictEeVo.class, new DictListener(this))
+                    .sheet("Dict")
+                    .doRead();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
