@@ -4,6 +4,8 @@ import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.klenkiven.yygh.cmn.listener.DictListener;
@@ -25,7 +27,12 @@ import java.util.List;
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
 
 
+    /**
+     * 下面的注解表明了，寻找的缓存名是什么
+     * 缓存的
+     */
     @Override
+    @Cacheable(value = "dict", keyGenerator = "keyGenerator")
     public List<Dict> findChildrenByParentId(Long id) {
 
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
@@ -87,7 +94,12 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
+    /**
+     * 下面的注解表明了，更新的是哪一个注解，allEntries这个属性的含义就是
+     * 清空所有的缓存
+     */
     @Override
+    @CacheEvict(value = "dict", allEntries = true)
     public void importDict(MultipartFile file) {
         try {
             EasyExcel.read(file.getInputStream(), DictEeVo.class, new DictListener(this))
