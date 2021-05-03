@@ -15,7 +15,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from xyz.klenkiven.yygh.hosp.repository -->
     </parent>
     <groupId>xyz.klenkiven</groupId>
     <artifactId>yygh_parent</artifactId>
@@ -143,27 +143,27 @@
 
     <!-- 配置阿里云的仓库 -->
     <repositories>
-        <repository>
+        <xyz.klenkiven.yygh.hosp.repository>
             <id>public</id>
-            <url>https://maven.aliyun.com/repository/public</url>
+            <url>https://maven.aliyun.com/xyz.klenkiven.yygh.hosp.repository/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-        </repository>
+        </xyz.klenkiven.yygh.hosp.repository>
 
-        <repository>
+        <xyz.klenkiven.yygh.hosp.repository>
             <id>spring</id>
-            <url>https://maven.aliyun.com/repository/spring</url>
+            <url>https://maven.aliyun.com/xyz.klenkiven.yygh.hosp.repository/spring</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-        </repository>
+        </xyz.klenkiven.yygh.hosp.repository>
     </repositories>
 
 

@@ -10,4 +10,13 @@ import xyz.klenkiven.yygh.model.hosp.HospitalSet;
  * @date ：2021/4/8 19:03
  */
 public interface HospitalSetService extends IService<HospitalSet> {
+
+    /**
+     * 通过hoscode获取医院的签名
+     *
+     * @param hoscode 医院编号
+     * @return 医院签名
+     */
+    String getSignKey(String hoscode);
+
 }
