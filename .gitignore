@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 yygh_log/
+C:
 
 ### STS ###
 .apt_generated
