@@ -109,4 +109,20 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String getDictName(String diccode, Integer value) {
+        QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("value", value);
+        if (!"".equals(diccode)) {
+            // Select for parent_id
+            QueryWrapper<Dict> wrapper = new QueryWrapper<>();
+            wrapper.eq("dict_code", diccode);
+            Dict dict = baseMapper.selectOne(wrapper);
+            // Add parent_id condition
+            queryWrapper.eq("parent_id", dict.getId());
+        }
+        Dict dict = baseMapper.selectOne(queryWrapper);
+        return dict != null? dict.getName(): null;
+    }
 }

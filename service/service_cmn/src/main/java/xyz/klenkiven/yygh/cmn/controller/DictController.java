@@ -69,4 +69,27 @@ public class DictController {
         return Result.ok();
     }
 
+    /**
+     * 根据dictcode和value查询字典内容
+     * @param diccode 字典名
+     * @param value 字典值
+     * @return 对应的字典内容
+     */
+    @ApiOperation("根据dictcode和value查询")
+    @GetMapping("/getName/{diccode}/{value}")
+    public String getName(@PathVariable String diccode,
+                          @PathVariable Integer value) {
+        return dictService.getDictName(diccode, value);
+    }
+
+    /**
+     * 根据Value查询字典内容
+     * @param value 字典值
+     * @return 字典内容
+     */
+    @ApiOperation("根据value查询")
+    @GetMapping("/getName/{value}")
+    public String getName(@PathVariable Integer value) {
+        return dictService.getDictName("", value);
+    }
 }
