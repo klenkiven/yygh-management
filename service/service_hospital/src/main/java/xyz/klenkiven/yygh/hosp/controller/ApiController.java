@@ -1,6 +1,7 @@
 package xyz.klenkiven.yygh.hosp.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import xyz.klenkiven.yygh.common.result.ResultCodeEnum;
 import xyz.klenkiven.yygh.common.utils.MD5;
 import xyz.klenkiven.yygh.hosp.service.HospitalService;
 import xyz.klenkiven.yygh.hosp.service.HospitalSetService;
+import xyz.klenkiven.yygh.model.hosp.Hospital;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -36,9 +38,10 @@ public class ApiController {
      * 签名校验。
      * 校验方法很简单，对签名进行MD5编码，之后进行比较就可以了
      *
-     * @param servletRequest
-     * @return
+     * @param servletRequest HTTP请求
+     * @return 成功返回
      */
+    @ApiOperation("医院上传接口")
     @PostMapping("saveHospital")
     public Result<?> saveHosp(HttpServletRequest servletRequest) {
         // Get parameter
@@ -59,5 +62,26 @@ public class ApiController {
         // Call service`s method
         hospitalService.save(paramMap);
         return Result.ok();
+    }
+
+    @ApiOperation("查询医院接口")
+    @PostMapping("/hospital/show")
+    public Result<Hospital> showHospital(HttpServletRequest request) {
+        // Get parameter
+        Map<String, String[]> resultMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(resultMap);
+
+        // get hoscode
+        String hoscode = (String) paramMap.get("hoscode");
+
+        // 校验签名
+        String hospSign = (String) paramMap.get("sign");
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        String encryptSign = MD5.encrypt(signKey);
+        if ( !hospSign.equals(encryptSign) )
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+
+        Hospital byHoscode = hospitalService.getByHoscode(hoscode);
+        return Result.ok(byHoscode);
     }
 }
