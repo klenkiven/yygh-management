@@ -17,6 +17,7 @@ import xyz.klenkiven.yygh.common.utils.MD5;
 import xyz.klenkiven.yygh.hosp.service.DepartmentService;
 import xyz.klenkiven.yygh.hosp.service.HospitalService;
 import xyz.klenkiven.yygh.hosp.service.HospitalSetService;
+import xyz.klenkiven.yygh.hosp.service.ScheduleService;
 import xyz.klenkiven.yygh.model.hosp.Department;
 import xyz.klenkiven.yygh.model.hosp.Hospital;
 import xyz.klenkiven.yygh.vo.hosp.DepartmentQueryVo;
@@ -37,6 +38,7 @@ public class ApiController {
     private final HospitalService hospitalService;
     private final HospitalSetService hospitalSetService;
     private final DepartmentService departmentService;
+    private final ScheduleService scheduleService;
 
     /**
      * 保存医院相关信息
@@ -127,7 +129,6 @@ public class ApiController {
     /**
      * 科室查询接口
      *
-     * @return
      */
     @ApiOperation("科室查询接口")
     @PostMapping("/department/list")
@@ -176,6 +177,31 @@ public class ApiController {
             throw new YyghException(ResultCodeEnum.SIGN_ERROR);
 
         departmentService.remove(hoscode, depcode);
+
+        return Result.ok();
+    }
+
+    /**
+     * 排班上传接口
+     *
+     * @param request HTTP请求
+     * @return 成功信息
+     */
+    @ApiOperation("排班上传接口")
+    @PostMapping("/saveSchedule")
+    public Result<?> saveSchedule(HttpServletRequest request) {
+        Map<String, String[]> resultMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(resultMap);
+
+        // 校验签名
+        String hoscode = (String) paramMap.get("hoscode");
+        String hospSign = (String) paramMap.get("sign");
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        String encryptSign = MD5.encrypt(signKey);
+        if ( !hospSign.equals(encryptSign) )
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+
+        scheduleService.save(paramMap);
 
         return Result.ok();
     }
