@@ -111,7 +111,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     @Override
-    public String getDictName(String diccode, Integer value) {
+    public String getDictName(String diccode, String value) {
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("value", value);
         if (!"".equals(diccode)) {

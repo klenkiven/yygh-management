@@ -78,7 +78,7 @@ public class DictController {
     @ApiOperation("根据dictcode和value查询")
     @GetMapping("/getName/{diccode}/{value}")
     public String getName(@PathVariable String diccode,
-                          @PathVariable Integer value) {
+                          @PathVariable String value) {
         return dictService.getDictName(diccode, value);
     }
 
@@ -89,7 +89,7 @@ public class DictController {
      */
     @ApiOperation("根据value查询")
     @GetMapping("/getName/{value}")
-    public String getName(@PathVariable Integer value) {
+    public String getName(@PathVariable String value) {
         return dictService.getDictName("", value);
     }
 }

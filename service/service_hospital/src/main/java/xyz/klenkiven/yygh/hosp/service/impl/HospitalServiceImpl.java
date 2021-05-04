@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import xyz.klenkiven.yygh.cmn.client.DictFeignClient;
 import xyz.klenkiven.yygh.hosp.repository.HospitalRepository;
 import xyz.klenkiven.yygh.hosp.service.HospitalService;
 import xyz.klenkiven.yygh.model.hosp.Hospital;
 import xyz.klenkiven.yygh.vo.hosp.HospitalQueryVo;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,6 +20,7 @@ import java.util.Map;
 public class HospitalServiceImpl implements HospitalService {
 
     private final HospitalRepository hospitalRepository;
+    private final DictFeignClient dictFeignClient;
 
     @Override
     public void save(Map<String, Object> paramMap) {
@@ -63,6 +66,25 @@ public class HospitalServiceImpl implements HospitalService {
                                             .withIgnoreCase(true);
         Example<Hospital> example = Example.of(hospital, exampleMatcher);
 
-        return hospitalRepository.findAll(example, pageable);
+        Page<Hospital> pages = hospitalRepository.findAll(example, pageable);
+
+        pages.getContent().forEach(this::setHospitalHosType);
+
+        return pages;
+    }
+
+    /**
+     * 为Hospital进行值封装
+     * @param hospital 医院信息
+     */
+    private void setHospitalHosType(Hospital hospital) {
+        String hostypeString = dictFeignClient.getName("Hostype", hospital.getHostype());
+        String provinceString = dictFeignClient.getName(hospital.getProvinceCode());
+        String cityString = dictFeignClient.getName(hospital.getCityCode());
+        String districtString = dictFeignClient.getName(hospital.getDistrictCode());
+        hospital.getParam().put("hostypeString", hostypeString);
+        hospital.getParam().put("provinceString", provinceString);
+        hospital.getParam().put("cityString", cityString);
+        hospital.getParam().put("districtString", districtString);
     }
 }

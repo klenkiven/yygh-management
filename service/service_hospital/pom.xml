@@ -21,6 +21,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>xyz.klenkiven</groupId>
+            <artifactId>service_cmn_client</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

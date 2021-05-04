@@ -41,5 +41,5 @@ public interface DictService extends IService<Dict> {
      * @param value 字典值
      * @return 字典内容
      */
-    String getDictName(String diccode, Integer value);
+    String getDictName(String diccode, String value);
 }
