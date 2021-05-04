@@ -20,7 +20,9 @@ import xyz.klenkiven.yygh.hosp.service.HospitalSetService;
 import xyz.klenkiven.yygh.hosp.service.ScheduleService;
 import xyz.klenkiven.yygh.model.hosp.Department;
 import xyz.klenkiven.yygh.model.hosp.Hospital;
+import xyz.klenkiven.yygh.model.hosp.Schedule;
 import xyz.klenkiven.yygh.vo.hosp.DepartmentQueryVo;
+import xyz.klenkiven.yygh.vo.hosp.ScheduleQueryVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -204,5 +206,29 @@ public class ApiController {
         scheduleService.save(paramMap);
 
         return Result.ok();
+    }
+
+    @ApiOperation("排班查询接口")
+    @PostMapping("/schedule/list")
+    public Result<Page<Schedule>> listSchedule(HttpServletRequest request) {
+
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(parameterMap);
+
+        String hoscode = (String) paramMap.get("hoscode");
+        int page = StringUtils.isEmpty(paramMap.get("page"))? 1: Integer.parseInt((String) paramMap.get("page"));
+        int limit = StringUtils.isEmpty(paramMap.get("limit"))? 1: Integer.parseInt((String) paramMap.get("limit"));
+
+        // 校验签名
+        String hospSign = (String) paramMap.get("sign");
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        String encryptSign = MD5.encrypt(signKey);
+        if ( !hospSign.equals(encryptSign) )
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+
+        ScheduleQueryVo queryVo = new ScheduleQueryVo();
+        queryVo.setHoscode(hoscode);
+        Page<Schedule> all = scheduleService.findPageSchedule(page, limit, queryVo);
+        return Result.ok(all);
     }
 }
