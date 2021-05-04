@@ -43,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Page<Department> findPageDepartment(int page, int limit, DepartmentQueryVo queryVo) {
-        Pageable pageable = PageRequest.of(page, limit);
+        Pageable pageable = PageRequest.of(page-1, limit);
         Department department = new Department();
         BeanUtils.copyProperties(queryVo, department);
         department.setIsDeleted(0);
