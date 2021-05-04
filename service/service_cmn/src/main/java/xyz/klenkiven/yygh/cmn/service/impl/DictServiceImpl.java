@@ -125,4 +125,17 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         Dict dict = baseMapper.selectOne(queryWrapper);
         return dict != null? dict.getName(): null;
     }
+
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        // Get parent_id
+        QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("dict_code", dictCode);
+        Dict dict = baseMapper.selectOne(queryWrapper);
+
+        // Get children
+        QueryWrapper<Dict> wrapper = new QueryWrapper<>();
+        wrapper.eq("parent_id", dict.getId());
+        return baseMapper.selectList(wrapper);
+    }
 }

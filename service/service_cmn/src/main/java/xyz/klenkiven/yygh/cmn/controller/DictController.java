@@ -70,6 +70,18 @@ public class DictController {
     }
 
     /**
+     * 根据 dictCode 获取下级节
+     * @param dictCode 字典名
+     * @return 字典内容
+     */
+    @ApiOperation("根据 dictCode 获取下级节点")
+    @GetMapping("/findByDictCode/{dictCode}")
+    public Result<List<Dict>> findByDictCode(@PathVariable String dictCode) {
+        List<Dict> dictList = dictService.findByDictCode(dictCode);
+        return Result.ok(dictList);
+    }
+
+    /**
      * 根据dictcode和value查询字典内容
      * @param diccode 字典名
      * @param value 字典值
