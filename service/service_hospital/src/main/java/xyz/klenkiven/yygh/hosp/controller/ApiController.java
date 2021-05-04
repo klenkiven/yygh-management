@@ -1,8 +1,10 @@
 package xyz.klenkiven.yygh.hosp.controller;
 
+import com.alibaba.excel.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,9 @@ import xyz.klenkiven.yygh.common.utils.MD5;
 import xyz.klenkiven.yygh.hosp.service.DepartmentService;
 import xyz.klenkiven.yygh.hosp.service.HospitalService;
 import xyz.klenkiven.yygh.hosp.service.HospitalSetService;
+import xyz.klenkiven.yygh.model.hosp.Department;
 import xyz.klenkiven.yygh.model.hosp.Hospital;
+import xyz.klenkiven.yygh.vo.hosp.DepartmentQueryVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -93,6 +97,13 @@ public class ApiController {
         return Result.ok(byHoscode);
     }
 
+    /**
+     * 科室上传接口
+     *      只能用于上传单个科室信息
+     *
+     * @param request HTTP请求
+     * @return 成功信息
+     */
     @ApiOperation("科室上传接口")
     @PostMapping("/saveDepartment")
     public Result<?> saveDepartment(HttpServletRequest request) {
@@ -111,5 +122,34 @@ public class ApiController {
         departmentService.save(paramMap);
 
         return Result.ok();
+    }
+
+    /**
+     * 科室查询接口
+     *
+     * @return
+     */
+    @ApiOperation("科室查询接口")
+    @PostMapping("/department/list")
+    public Result<Page<Department>> listDepartment(HttpServletRequest request) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(parameterMap);
+
+        String hoscode = (String) paramMap.get("hoscode");
+        int page = StringUtils.isEmpty(paramMap.get("page"))? 1: Integer.parseInt((String) paramMap.get("page"));
+        int limit = StringUtils.isEmpty(paramMap.get("limit"))? 1: Integer.parseInt((String) paramMap.get("limit"));
+
+        // 校验签名
+        String hospSign = (String) paramMap.get("sign");
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        String encryptSign = MD5.encrypt(signKey);
+        if ( !hospSign.equals(encryptSign) )
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+
+        DepartmentQueryVo queryVo = new DepartmentQueryVo();
+        queryVo.setHoscode(hoscode);
+        Page<Department> departmentPage = departmentService.findPageDepartment(page, limit, queryVo);
+
+        return Result.ok(departmentPage);
     }
 }
