@@ -2,10 +2,13 @@ package xyz.klenkiven.yygh.hosp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import xyz.klenkiven.yygh.hosp.repository.HospitalRepository;
 import xyz.klenkiven.yygh.hosp.service.HospitalService;
 import xyz.klenkiven.yygh.model.hosp.Hospital;
+import xyz.klenkiven.yygh.vo.hosp.HospitalQueryVo;
 
 import java.util.Date;
 import java.util.Map;
@@ -47,5 +50,19 @@ public class HospitalServiceImpl implements HospitalService {
     @Override
     public Hospital getByHoscode(String hoscode) {
         return hospitalRepository.getHospitalByHoscode(hoscode);
+    }
+
+    @Override
+    public Page<Hospital> selectHospPage(int page, int limit, HospitalQueryVo queryVo) {
+        Pageable pageable = PageRequest.of(page-1, limit);
+        Hospital hospital = new Hospital();
+        BeanUtils.copyProperties(queryVo, hospital);
+
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+                                            .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                                            .withIgnoreCase(true);
+        Example<Hospital> example = Example.of(hospital, exampleMatcher);
+
+        return hospitalRepository.findAll(example, pageable);
     }
 }

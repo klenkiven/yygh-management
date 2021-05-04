@@ -42,7 +42,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Page<Schedule> findPageSchedule(int page, int limit, ScheduleQueryVo queryVo) {
-        Pageable pageable = PageRequest.of(page, limit);
+        Pageable pageable = PageRequest.of(page-1, limit);
         Schedule schedule = new Schedule();
         BeanUtils.copyProperties(queryVo, schedule);
 
