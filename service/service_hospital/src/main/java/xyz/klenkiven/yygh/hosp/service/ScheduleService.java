@@ -24,4 +24,12 @@ public interface ScheduleService {
      * @return 页信息
      */
     Page<Schedule> findPageSchedule(int page, int limit, ScheduleQueryVo queryVo);
+
+    /**
+     * 根据医院ID和排班ID唯一删除一个排班信息
+     *
+     * @param hoscode 医院编号
+     * @param hosScheduleId 排班编号
+     */
+    void remove(String hoscode, String hosScheduleId);
 }

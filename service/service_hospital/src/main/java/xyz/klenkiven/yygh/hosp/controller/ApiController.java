@@ -208,6 +208,12 @@ public class ApiController {
         return Result.ok();
     }
 
+    /**
+     * 排班查询接口
+     *
+     * @param request HTTP请求
+     * @return 排版查询页
+     */
     @ApiOperation("排班查询接口")
     @PostMapping("/schedule/list")
     public Result<Page<Schedule>> listSchedule(HttpServletRequest request) {
@@ -230,5 +236,27 @@ public class ApiController {
         queryVo.setHoscode(hoscode);
         Page<Schedule> all = scheduleService.findPageSchedule(page, limit, queryVo);
         return Result.ok(all);
+    }
+
+    @ApiOperation("排班删除接口")
+    @PostMapping("/schedule/remove")
+    public Result<?> removeSchedule(HttpServletRequest request) {
+
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(parameterMap);
+
+        String hoscode = (String) paramMap.get("hoscode");
+        String hosScheduleId = (String) paramMap.get("hosScheduleId");
+
+        // 校验签名
+        String hospSign = (String) paramMap.get("sign");
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        String encryptSign = MD5.encrypt(signKey);
+        if ( !hospSign.equals(encryptSign) )
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+
+        scheduleService.remove(hoscode, hosScheduleId);
+
+        return Result.ok();
     }
 }

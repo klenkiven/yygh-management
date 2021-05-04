@@ -16,4 +16,11 @@ public interface ScheduleRepository extends MongoRepository<Schedule, String> {
      */
     Schedule getScheduleByHoscodeAndHosScheduleId(String hoscode, String hosScheduleId);
 
+    /**
+     * 根据医院编号和排班ID查找删除信息
+     *
+     * @param hoscode 医院编号
+     * @param hosScheduleId 排班信息
+     */
+    void deleteScheduleByHoscodeAndHosScheduleId(String hoscode, String hosScheduleId);
 }
