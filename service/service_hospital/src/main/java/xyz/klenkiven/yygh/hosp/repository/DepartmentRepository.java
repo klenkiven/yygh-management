@@ -18,4 +18,12 @@ public interface DepartmentRepository extends MongoRepository<Department, String
      * @return 科室对象
      */
     Department getDepatmentByHoscodeAndDepcode(String hoscode, String depcode);
+
+    /**
+     * 根据医院编号和科室编号删除科室对象
+     *
+     * @param hoscode 医院编号
+     * @param depcode 科室编号
+     */
+    void deleteDepartmentByHoscodeAndDepcode(String hoscode, String depcode);
 }

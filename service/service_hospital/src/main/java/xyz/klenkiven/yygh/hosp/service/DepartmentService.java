@@ -24,4 +24,12 @@ public interface DepartmentService {
      * @return 页信息
      */
     Page<Department> findPageDepartment(int page, int limit, DepartmentQueryVo queryVo);
+
+    /**
+     * 根据医院编号和部门编号删除指定的部门信息
+     *
+     * @param hoscode 医院编号
+     * @param depcode 部门编号
+     */
+    void remove(String hoscode, String depcode);
 }

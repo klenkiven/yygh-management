@@ -152,4 +152,25 @@ public class ApiController {
 
         return Result.ok(departmentPage);
     }
+
+    @ApiOperation("科室删除接口")
+    @PostMapping("/department/remove")
+    public Result<?> departmentRemove(HttpServletRequest request) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(parameterMap);
+
+        String hoscode = (String) paramMap.get("hostcode");
+        String depcode = (String) paramMap.get("deptcode");
+
+        // 校验签名
+        String hospSign = (String) paramMap.get("sign");
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        String encryptSign = MD5.encrypt(signKey);
+        if ( !hospSign.equals(encryptSign) )
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+
+        departmentService.remove(hoscode, depcode);
+
+        return Result.ok();
+    }
 }
