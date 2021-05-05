@@ -95,6 +95,14 @@ public class HospitalServiceImpl implements HospitalService {
         return result;
     }
 
+    @Override
+    public String getHosnameByHoscode(String hoscode) {
+        Hospital byHoscode = getByHoscode(hoscode);
+        if (byHoscode != null)
+            return byHoscode.getHosname();
+        return null;
+    }
+
     /**
      * 为Hospital进行值封装
      * @param hospital 医院信息
