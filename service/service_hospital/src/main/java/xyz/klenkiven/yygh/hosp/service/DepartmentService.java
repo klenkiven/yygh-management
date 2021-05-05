@@ -3,7 +3,9 @@ package xyz.klenkiven.yygh.hosp.service;
 import org.springframework.data.domain.Page;
 import xyz.klenkiven.yygh.model.hosp.Department;
 import xyz.klenkiven.yygh.vo.hosp.DepartmentQueryVo;
+import xyz.klenkiven.yygh.vo.hosp.DepartmentVo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface DepartmentService {
@@ -32,4 +34,11 @@ public interface DepartmentService {
      * @param depcode 部门编号
      */
     void remove(String hoscode, String depcode);
+
+    /**
+     * 根据医院编号，查询医院所有科室列表
+     * @param hoscode
+     * @return
+     */
+    List<DepartmentVo> findDeptTree(String hoscode);
 }
