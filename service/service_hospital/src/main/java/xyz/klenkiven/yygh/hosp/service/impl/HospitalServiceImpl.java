@@ -12,6 +12,7 @@ import xyz.klenkiven.yygh.model.hosp.Hospital;
 import xyz.klenkiven.yygh.vo.hosp.HospitalQueryVo;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +72,27 @@ public class HospitalServiceImpl implements HospitalService {
         pages.getContent().forEach(this::setHospitalHosType);
 
         return pages;
+    }
+
+    @Override
+    public void updateStatus(String id, Integer status) {
+        Hospital hospital = hospitalRepository.findById(id).get();
+        hospital.setStatus(status);
+        hospital.setUpdateTime(new Date());
+        hospitalRepository.save(hospital);
+    }
+
+    @Override
+    public Map<String, Object> getHospById(String id) {
+        Map<String, Object> result = new HashMap<>();
+        Hospital hospital = hospitalRepository.findById(id).get();
+        setHospitalHosType(hospital);
+
+        result.put("hospital", hospital);
+        result.put("bookingRule", hospital.getBookingRule());
+        hospital.setBookingRule(null);
+
+        return result;
     }
 
     /**
