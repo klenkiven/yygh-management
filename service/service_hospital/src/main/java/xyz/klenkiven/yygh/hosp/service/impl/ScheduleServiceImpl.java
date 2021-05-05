@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import xyz.klenkiven.yygh.hosp.repository.ScheduleRepository;
+import xyz.klenkiven.yygh.hosp.service.DepartmentService;
 import xyz.klenkiven.yygh.hosp.service.HospitalService;
 import xyz.klenkiven.yygh.hosp.service.ScheduleService;
 import xyz.klenkiven.yygh.model.hosp.Hospital;
@@ -32,6 +33,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final MongoTemplate mongoTemplate;
     private final HospitalService hospitalService;
+    private final DepartmentService departmentService;
 
     @Override
     public void save(Map<String, Object> paramMap) {
@@ -125,6 +127,28 @@ public class ScheduleServiceImpl implements ScheduleService {
         result.put("baseMap", baseMap);
 
         return result;
+    }
+
+    @Override
+    public List<Schedule> getScheduleDetail(String hoscode, String depcode, String workDate) {
+        List<Schedule> scheduleList =
+                scheduleRepository.findAllByHoscodeAndDepcodeAndWorkDate(hoscode, depcode, new DateTime(workDate).toDate());
+        scheduleList.forEach(this::packageSchedule);
+        return scheduleList;
+    }
+
+    /**
+     * 封装排班其他信息
+     *      医院名称
+     *      科室名称
+     *      日期对应星期
+     * @param item 排班信息详情
+     */
+    private void packageSchedule(Schedule item) {
+        Map<String, Object> param = item.getParam();
+        param.put("hosname", hospitalService.getHosnameByHoscode(item.getHoscode()));
+        param.put("depname", departmentService.getDepnameByDepcode(item.getHoscode(), item.getDepcode()));
+        param.put("dayOfWeek", getDayOfWeek(new DateTime(item.getWorkDate())));
     }
 
     /**
