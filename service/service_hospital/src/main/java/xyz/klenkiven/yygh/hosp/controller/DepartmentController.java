@@ -13,7 +13,6 @@ import java.util.List;
 @Api(tags = "医院科室")
 @RestController
 @RequestMapping("/admin/hosp/department")
-@CrossOrigin
 @AllArgsConstructor
 public class DepartmentController {
 

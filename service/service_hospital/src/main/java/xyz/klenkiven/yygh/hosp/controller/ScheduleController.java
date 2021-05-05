@@ -14,7 +14,6 @@ import java.util.Map;
 @Api(tags = "排班管理接口")
 @RestController
 @RequestMapping("/admin/hosp/schedule")
-@CrossOrigin
 @AllArgsConstructor
 public class ScheduleController {
 
