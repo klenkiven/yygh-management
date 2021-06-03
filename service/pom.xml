@@ -12,7 +12,6 @@
     <artifactId>service</artifactId>
     <version>1.0</version>
     <modules>
-        <module>service_user</module>
         <module>service_hospital</module>
         <module>service_cmn</module>
         <module>service_user</module>
