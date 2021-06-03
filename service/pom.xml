@@ -15,6 +15,7 @@
         <module>service_user</module>
         <module>service_hospital</module>
         <module>service_cmn</module>
+        <module>service_user</module>
     </modules>
     <packaging>pom</packaging>
 
