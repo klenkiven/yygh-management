@@ -103,6 +103,12 @@ public class HospitalServiceImpl implements HospitalService {
         return null;
     }
 
+    @Override
+    public List<Hospital> findByHospname(String hosname) {
+        List<Hospital> hospitalList = hospitalRepository.findHospitalByHosnameLike(hosname);
+        return hospitalList;
+    }
+
     /**
      * 为Hospital进行值封装
      * @param hospital 医院信息

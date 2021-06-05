@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import xyz.klenkiven.yygh.model.hosp.Hospital;
 import xyz.klenkiven.yygh.vo.hosp.HospitalQueryVo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface HospitalService {
@@ -54,4 +55,11 @@ public interface HospitalService {
      * @return 医院名称
      */
     String getHosnameByHoscode(String hoscode);
+
+    /**
+     * 根据医院名称获得医院列表
+     * @param hosname 医院名称
+     * @return 医院列表
+     */
+    List<Hospital> findByHospname(String hosname);
 }

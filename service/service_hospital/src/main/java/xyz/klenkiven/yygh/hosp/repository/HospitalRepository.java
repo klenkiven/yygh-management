@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import xyz.klenkiven.yygh.model.hosp.Hospital;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,4 +25,11 @@ public interface HospitalRepository extends MongoRepository<Hospital, String> {
      * @return 对应医院code
      */
     Hospital getHospitalByHoscode(String hoscode);
+
+    /**
+     * 根据医院名称获取医院列表
+     * @param hospname 医院名称
+     * @return 医院列表
+     */
+    List<Hospital> findHospitalByHosnameLike(String hospname);
 }
