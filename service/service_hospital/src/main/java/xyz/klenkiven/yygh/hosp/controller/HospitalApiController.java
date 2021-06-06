@@ -7,11 +7,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import xyz.klenkiven.yygh.common.result.Result;
+import xyz.klenkiven.yygh.hosp.service.DepartmentService;
 import xyz.klenkiven.yygh.hosp.service.HospitalService;
+import xyz.klenkiven.yygh.model.hosp.BookingRule;
 import xyz.klenkiven.yygh.model.hosp.Hospital;
+import xyz.klenkiven.yygh.vo.hosp.DepartmentVo;
 import xyz.klenkiven.yygh.vo.hosp.HospitalQueryVo;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Api(tags = "医院管理接口")
@@ -21,6 +25,7 @@ import java.util.List;
 public class HospitalApiController {
 
     private final HospitalService hospitalService;
+    private final DepartmentService departmentService;
 
     /**
      * 医院分页查询
@@ -50,4 +55,19 @@ public class HospitalApiController {
         List<Hospital> hospital = hospitalService.findByHospname(hosname);
         return Result.ok(hospital);
     }
+
+    @ApiOperation(value = "获取科室列表")
+    @GetMapping("department/{hoscode}")
+    public Result<List<DepartmentVo>> findDepartmentList(@PathVariable String hoscode) {
+        List<DepartmentVo> deptTree = departmentService.findDeptTree(hoscode);
+        return Result.ok(deptTree);
+    }
+
+    @ApiOperation(value = "医院预约挂号详情")
+    @GetMapping("{hoscode}")
+    public Result<Map<String, Object>> getHospitalDetail(@PathVariable String hoscode) {
+        Map<String, Object> hospitalDetail = hospitalService.getHospitalDetail(hoscode);
+        return Result.ok(hospitalDetail);
+    }
+
 }
